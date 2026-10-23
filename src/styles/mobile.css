@@ -27,6 +27,23 @@ summary {
   .btn-small {
     min-height: 2.75rem;
   }
+
+  /* small text links get a finger-sized hit area without moving the text */
+  .all-prices-box summary,
+  .contact-insta a,
+  .legal a {
+    display: inline-block;
+    padding-block: 0.65rem 0.55rem;
+    margin-block: -0.65rem -0.55rem;
+  }
+
+  .all-prices-box summary {
+    display: inline-flex;
+  }
+
+  .all-prices-box[open] summary {
+    margin-bottom: 0.5rem;
+  }
 }
 
 /* ——— Hero on phones: who, what, call. The stamp sits beside her name, on the first screen ——— */
@@ -136,5 +153,213 @@ summary {
     translate: 0 calc(100% + 2rem);
     visibility: hidden;
     transition: translate 0.35s var(--ease), visibility 0s 0.35s;
+  }
+}
+
+/* ——— Session on phones: the number beside its step, one thread from step to step ——— */
+@media (max-width: 719px) {
+  .steps {
+    gap: 0;
+  }
+
+  .steps li {
+    position: relative;
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    gap: 0.35rem 0.9rem;
+    padding-bottom: 2rem;
+  }
+
+  .steps li:last-child {
+    padding-bottom: 0;
+  }
+
+  .steps li > * {
+    grid-column: 2;
+  }
+
+  .steps li::before {
+    grid-row: 1 / span 2;
+    justify-self: center;
+    font-size: 2.5rem;
+    line-height: 0.8;
+  }
+
+  .steps li::after {
+    content: '';
+    position: absolute;
+    left: 1.125rem;
+    top: 2.75rem;
+    bottom: 0.5rem;
+    width: 1px;
+    background: var(--sauge);
+    opacity: 0.5;
+    transform-origin: 50% 0;
+    transition: scale 0.8s var(--ease) 0.25s;
+  }
+
+  .steps li:last-child::after {
+    display: none;
+  }
+
+  /* each number lands as its own step comes into view (motion.ts) */
+  .steps li:nth-child(n)::before {
+    transition-delay: 0s;
+  }
+
+  .steps li.is-waiting::before {
+    opacity: 0;
+    translate: 0 0.5em;
+  }
+
+  .steps li.is-waiting::after {
+    scale: 1 0;
+  }
+}
+
+/* ——— Zone on phones: the map from edge to edge, its labels inside the soft edge ——— */
+@media (max-width: 599px) {
+  .zone {
+    gap: 0.5rem;
+  }
+
+  .zone-answer {
+    min-height: 2.8em; /* room for a two-line answer, so the map does not jump */
+  }
+
+  /* the map's corners are transparent (radial mask): let it use the whole width
+     and come up under the form */
+  .zone-figure {
+    margin: -8% calc(-1 * var(--gutter)) 0;
+  }
+
+  /* The labels are bigger on phones (sections.css): the soft edge reaches further out
+     sideways, where the map meets the screen edge anyway, so « Marmande » stays whole */
+  .zone-map {
+    -webkit-mask-image: radial-gradient(56% 50%, #000 80%, transparent);
+    mask-image: radial-gradient(56% 50%, #000 80%, transparent);
+  }
+
+  /* Bordeaux (INSEE 33063) right of its dot: on the left the soft edge ate half the name */
+  .zone-map text[data-c='33063'] {
+    text-anchor: start;
+    transform: translate(22px, 6px);
+  }
+
+  .zone-map {
+    margin-bottom: -5%;
+  }
+
+  .zone-figure figcaption {
+    margin-top: 0;
+    padding-inline: var(--gutter);
+  }
+}
+
+/* Small tablets: the map no taller than a screen */
+@media (min-width: 600px) and (max-width: 899px) {
+  .zone-figure {
+    width: min(100%, 34rem);
+    margin-inline: auto;
+  }
+}
+
+/* ——— Animals on phones: the five words on two lines, the price closer to the tap ——— */
+@media (max-width: 599px) {
+  .picker-tabs {
+    column-gap: 0.6rem;
+  }
+
+  .picker-tabs button {
+    font-size: clamp(2rem, 1rem + 4.4vw, 2.25rem);
+  }
+
+  /* a landscape crop: after a tap the animal's name and first lines show with its photo */
+  .panel-photo img,
+  .panel-photo [data-missing-photo] {
+    aspect-ratio: 4 / 3;
+  }
+
+  .panel {
+    gap: 1.25rem;
+  }
+
+  /* her mark, smaller, behind the prices instead of peeking out around the photo */
+  .watermark {
+    top: auto;
+    bottom: 2.5rem;
+    right: -2rem;
+    height: 16rem;
+  }
+}
+
+/* ——— Small tablets, and phones held sideways: two columns where one would make a tower ——— */
+@media (min-width: 600px) and (max-width: 959px) {
+  .hero {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  .hero-visual {
+    width: 100%;
+  }
+
+  .panel,
+  .about:not(:has(> [data-missing-photo])) {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+  }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  :root {
+    --section: 3.5rem;
+  }
+
+  .hero {
+    padding-top: 1rem;
+  }
+
+  .hero-name {
+    font-size: clamp(3rem, 1.5rem + 4vw, 4rem);
+  }
+
+  /* the stamp and its rose shape fit the screen's height */
+  .hero-visual {
+    width: min(100%, (100svh - 4rem) * 0.8);
+  }
+
+  .zone {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  /* the map runs off the right edge, so its soft edge can reach further out on that side
+     and keep « Marmande » whole */
+  .zone-figure {
+    width: min(100% + var(--gutter), 100svh);
+    justify-self: end;
+    margin-right: calc(-1 * var(--gutter));
+  }
+
+  .zone-map {
+    -webkit-mask-image: radial-gradient(52% 50% at 54% 50%, #000 80%, transparent);
+    mask-image: radial-gradient(52% 50% at 54% 50%, #000 80%, transparent);
+  }
+
+  .zone-map text[data-c='33063'] {
+    text-anchor: start;
+    transform: translate(22px, 6px);
+  }
+
+  /* the map is drawn about as small as on a phone held upright: same labels (sections.css) */
+  .zone-map text {
+    font-size: 30px;
+    stroke-width: 7px;
+  }
+
+  .zone-map text.base {
+    font-size: 40px;
+  }
+
+  .zone-map text.minor:not(.hit-label) {
+    display: none;
   }
 }
