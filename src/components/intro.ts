@@ -5,7 +5,7 @@
 export function playIntro() {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
   const seal = document.querySelector<SVGSVGElement>('.seal')
-  const mark = seal?.querySelector<SVGUseElement>('.seal-mark')
+  const mark = seal?.querySelector<SVGGElement>('.seal-mark') // a <g>, so the mask shares the seal's coordinates
   const blob = document.querySelector<HTMLElement>('.hero-blob')
   if (!seal || !mark || !blob || typeof mark.animate !== 'function') return
 

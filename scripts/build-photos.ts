@@ -13,7 +13,10 @@ const out = new URL('../public/photos/', import.meta.url).pathname
 const jobs: Job[] = [
   // Léa's own photos (Instagram, to be replaced by her originals)
   { src: 'ig/ig-spaniel.jpg', out: 'lea-epagneul', widths: [560, 840, 1240], ratio: 4 / 5, crop: { left: 0, top: 0.2, width: 1 } },
-  { src: 'ig/ig-spaniel.jpg', out: 'chien', widths: [480, 800, 1100], ratio: 4 / 5, crop: { left: 0.06, top: 0.36, width: 0.88 } },
+  // Until Léa's spaniel photo is here, the dog panel uses a free photo of the same breed:
+  // swap this line for the commented one (and the credit in src/data/species.ts)
+  // { src: 'ig/ig-spaniel.jpg', out: 'chien', widths: [480, 800, 1100], ratio: 4 / 5, crop: { left: 0.06, top: 0.36, width: 0.88 } },
+  { src: 'stock/chien.jpg', out: 'chien', widths: [480, 800, 1100], ratio: 4 / 5, crop: { left: 0.3, top: 0, width: 0.533 } },
   { src: 'ig/ig-white-dog.jpg', out: 'lea-patou', widths: [560, 900], ratio: 4 / 5, crop: { left: 0.1, top: 0, width: 0.8 } },
   // Free photos (Unsplash licence), see CREDITS.md
   { src: 'stock/cheval.jpg', out: 'cheval', widths: [480, 800, 1100], ratio: 4 / 5, crop: { left: 0, top: 0.08, width: 1 } },

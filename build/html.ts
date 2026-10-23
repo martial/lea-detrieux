@@ -50,7 +50,7 @@ function panel(s: Species, i: number) {
   ).join('')
   const reasons = s.reasons.map((r) => `<li>${r}</li>`).join('')
   const credit = s.photo.credit ? `<figcaption>Photo&nbsp;: ${s.photo.credit} (Unsplash)</figcaption>` : ''
-  return `<article class="panel${i === 0 ? ' is-active' : ''}" id="${s.slug}" role="tabpanel" aria-labelledby="tab-${s.slug}" data-sms="${esc(s.forSms)}" tabindex="0">
+  return `<div class="panel${i === 0 ? ' is-active' : ''}" id="${s.slug}" role="tabpanel" aria-labelledby="tab-${s.slug}" data-sms="${esc(s.forSms)}">
   <figure class="panel-photo">${picture(s.photo.name, s.photo.alt, '(min-width: 960px) 420px, 88vw')}${credit}</figure>
   <div class="panel-text">
     <h3>${s.title}</h3>
@@ -58,7 +58,7 @@ function panel(s: Species, i: number) {
     <ul class="reasons" data-draft>${reasons}</ul>
     <ul class="prices" aria-label="Tarifs">${prices}</ul>
   </div>
-</article>`
+</div>`
 }
 
 function pricesTable() {

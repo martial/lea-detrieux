@@ -160,6 +160,19 @@
   filter: drop-shadow(0 6px 18px rgb(43 52 36 / 0.14));
 }
 
+/* Until Léa's photo arrives, the stamp itself is the hero image */
+.hero-visual:has(> [data-missing-photo]) > [data-missing-photo] {
+  display: none;
+}
+
+.hero-visual:has(> [data-missing-photo]) .seal {
+  left: 50%;
+  top: 48%;
+  bottom: auto;
+  width: 66%;
+  transform: translate(-50%, -50%) rotate(-6deg);
+}
+
 .seal-paper {
   fill: var(--blanc);
 }
@@ -623,6 +636,10 @@
 }
 
 /* ——— About ——— */
+.about:has(> [data-missing-photo]) > [data-missing-photo] {
+  display: none;
+}
+
 .about {
   display: grid;
   gap: clamp(2rem, 1.5rem + 3vw, 4.5rem);
@@ -630,7 +647,7 @@
 }
 
 @media (min-width: 860px) {
-  .about {
+  .about:not(:has(> [data-missing-photo])) {
     grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
   }
 }

@@ -41,7 +41,11 @@ export const species: Species[] = [
     word: 'Chien',
     title: 'Chiens et chiots',
     forSms: 'mon chien',
-    photo: { name: 'chien', alt: 'Un épagneul breton blanc et orange, assis contre Léa, regarde l’objectif.' },
+    photo: {
+      name: 'chien',
+      alt: 'Un épagneul breton blanc et orange, de la neige sur le museau.',
+      credit: 'Anna Kimbell',
+    },
     reasons: [
       'Il a du mal à se lever, à sauter dans la voiture ou à monter les escaliers.',
       'Après un accident, une chute ou une opération, avec l’accord de votre vétérinaire.',
