@@ -159,6 +159,7 @@ summary {
 /* ——— Session on phones: the number beside its step, one thread from step to step ——— */
 @media (max-width: 719px) {
   .steps {
+    max-width: 38rem;
     gap: 0;
   }
 
@@ -232,19 +233,6 @@ summary {
     margin: -8% calc(-1 * var(--gutter)) 0;
   }
 
-  /* The labels are bigger on phones (sections.css): the soft edge reaches further out
-     sideways, where the map meets the screen edge anyway, so « Marmande » stays whole */
-  .zone-map {
-    -webkit-mask-image: radial-gradient(56% 50%, #000 80%, transparent);
-    mask-image: radial-gradient(56% 50%, #000 80%, transparent);
-  }
-
-  /* Bordeaux (INSEE 33063) right of its dot: on the left the soft edge ate half the name */
-  .zone-map text[data-c='33063'] {
-    text-anchor: start;
-    transform: translate(22px, 6px);
-  }
-
   .zone-map {
     margin-bottom: -5%;
   }
@@ -255,11 +243,38 @@ summary {
   }
 }
 
-/* Small tablets: the map no taller than a screen */
+/* Below 900px the labels are bigger for the map's size (sections.css and below), so the
+   soft edge reaches further out sideways, where there is only countryside, and
+   « Marmande » or « Sauveterre-de-Guyenne » stay whole */
+@media (max-width: 899px) {
+  .zone-map {
+    -webkit-mask-image: radial-gradient(56% 50%, #000 80%, transparent);
+    mask-image: radial-gradient(56% 50%, #000 80%, transparent);
+  }
+
+  /* Bordeaux (INSEE 33063) right of its dot: on the left the soft edge ate half the name */
+  .zone-map text[data-c='33063'] {
+    text-anchor: start;
+    transform: translate(22px, 6px);
+  }
+}
+
+/* Small tablets: the map no taller than a screen, its labels still readable (~14px) */
 @media (min-width: 600px) and (max-width: 899px) {
   .zone-figure {
     width: min(100%, 34rem);
     margin-inline: auto;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 899px) {
+  .zone-map text {
+    font-size: 20px;
+    stroke-width: 5px;
+  }
+
+  .zone-map text.base {
+    font-size: 28px;
   }
 }
 
@@ -282,13 +297,16 @@ summary {
   .panel {
     gap: 1.25rem;
   }
+}
 
-  /* her mark, smaller, behind the prices instead of peeking out around the photo */
+/* her mark, smaller and whole, behind the prices instead of peeking out around the photo
+   and behind the animal words */
+@media (max-width: 759px) {
   .watermark {
     top: auto;
     bottom: 2.5rem;
     right: -2rem;
-    height: 16rem;
+    height: clamp(16rem, 8rem + 20vw, 22rem);
   }
 }
 
@@ -309,7 +327,8 @@ summary {
   }
 }
 
-@media (orientation: landscape) and (max-height: 520px) {
+/* Phones held sideways (the widest is ~930px) */
+@media (orientation: landscape) and (max-height: 520px) and (max-width: 959px) {
   :root {
     --section: 3.5rem;
   }
@@ -327,6 +346,14 @@ summary {
     width: min(100%, (100svh - 4rem) * 0.8);
   }
 
+  /* the smallest phones: one column, the map no taller than the screen */
+  .zone-figure {
+    width: min(100%, 100svh);
+    margin: 0 auto;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 520px) and (min-width: 640px) and (max-width: 959px) {
   .zone {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
@@ -336,7 +363,7 @@ summary {
   .zone-figure {
     width: min(100% + var(--gutter), 100svh);
     justify-self: end;
-    margin-right: calc(-1 * var(--gutter));
+    margin: 0 calc(-1 * var(--gutter)) 0 0;
   }
 
   .zone-map {
