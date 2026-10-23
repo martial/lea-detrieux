@@ -78,8 +78,11 @@ a {
   text-decoration-thickness: 1px;
 }
 
-a:hover {
-  text-decoration-color: currentColor;
+/* Hover effects only where there is a real pointer: on touch screens they stick after a tap */
+@media (hover: hover) {
+  a:hover {
+    text-decoration-color: currentColor;
+  }
 }
 
 :focus-visible {
@@ -138,17 +141,19 @@ small,
   scale: 0.97;
 }
 
-.btn:hover {
-  background: #1d2418;
-}
-
 .btn-quiet {
   background: transparent;
   color: var(--olive);
 }
 
-.btn-quiet:hover {
-  background: var(--sauge-pale);
+@media (hover: hover) {
+  .btn:hover {
+    background: #1d2418;
+  }
+
+  .btn-quiet:hover {
+    background: var(--sauge-pale);
+  }
 }
 
 .btn-small {
