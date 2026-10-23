@@ -141,7 +141,7 @@ const roundPath = (d: string | null) => (d ?? '').replace(/-?\d+\.\d+/g, (n) => 
 
 const [cx, cy] = projection(centre)!
 const svg = `<svg class="zone-map" viewBox="0 0 ${SIZE} ${SIZE}" role="img" aria-labelledby="zone-map-title">
-<title id="zone-map-title">Carte du Sud-Gironde : la zone d'intervention couvre environ ${zone.radiusKm} km autour de ${zone.base}, le long de la Garonne.</title>
+<title id="zone-map-title">Carte du Sud-Gironde : je me déplace en général jusqu’à ${zone.radiusKm} km autour de ${zone.base}, des deux côtés de la Garonne.</title>
 <path class="area" d="${blob()}"/>
 <path class="river" pathLength="1" d="${roundPath(path(garonne))}"/>
 <g class="dots">${dots}</g>

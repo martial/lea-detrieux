@@ -15,4 +15,6 @@ export const zone = {
   code: '33227', // code INSEE de Langon
   centre: [-0.2422, 44.5355] as [number, number],
   radiusKm: 40, // à confirmer avec Léa
+  // Named in the zone text and in the JSON-LD (areaServed); keep both in step
+  towns: ['Langon', 'Bazas', 'La Réole', 'Cadillac', 'Saint-Macaire', 'Villandraut', 'Sauveterre-de-Guyenne'],
 }
