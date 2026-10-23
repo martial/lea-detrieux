@@ -6,6 +6,7 @@
 |---|---|---|---|
 | `src/assets/photos/ig/*` | Léa's Instagram, @leadetrieux_oa (the white-dog photo is a screenshot of her post, logo included) | Léa Detrieux | hers |
 | `src/assets/photos/stock/cheval.jpg` | https://unsplash.com/photos/cjSUZMA2iW8 | Pieter van Noorden | Unsplash License |
+| `src/assets/photos/stock/chien.jpg` | https://unsplash.com/photos/B26D9IagWes | Anna Kimbell | Unsplash License |
 | `src/assets/photos/stock/vache.jpg` | https://unsplash.com/photos/RxHhxWnXmNs | Luke Stackpoole | Unsplash License |
 | `src/assets/photos/stock/chat.jpg` | https://unsplash.com/photos/G7kUPmzi80E | Zoë Gayah Jonker | Unsplash License |
 | `src/assets/photos/stock/poule.jpg` | https://unsplash.com/photos/auijD19Byq8 | Ben Moreland | Unsplash License |

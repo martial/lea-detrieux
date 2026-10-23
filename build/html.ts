@@ -141,7 +141,8 @@ const includes: Record<string, () => string> = {
   'json-ld': jsonLd,
   'og-image': () => `<meta property="og:image" content="${site.url}og.jpg"><meta property="og:image:alt" content="Léa Detrieux, ostéopathe animalier à domicile autour de Langon"><meta property="og:url" content="${site.url}">`,
   canonical: () => `<link rel="canonical" href="${site.url}">`,
-  'price-range': () => `de ${minPrice} à ${euro(maxPrice)}`,
+  // in running text the € stays plain; the small grey € is for the price lists
+  'price-range': () => `de ${minPrice} à ${maxPrice}&nbsp;€`,
   'hero-photo': () => picture('lea-epagneul', 'Léa Detrieux, ostéopathe animalier, tient contre elle un épagneul breton blanc et orange.', '(min-width: 960px) 520px, 92vw', { eager: true, cls: 'hero-picture' }),
   'about-photo': () => picture('lea-patou', 'Léa Detrieux, assise en terrasse, caresse un grand chien blanc.', '(min-width: 960px) 440px, 88vw', { cls: 'about-picture' }),
 }
