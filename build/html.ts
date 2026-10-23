@@ -9,7 +9,7 @@ import { site, zone } from '../src/data/site.ts'
 const root = new URL('../', import.meta.url).pathname
 const read = (p: string) => readFileSync(root + p, 'utf8')
 
-const euro = (n: number) => `${n}&nbsp;€`
+const euro = (n: number) => `${n}<span class="eur">&nbsp;€</span>`
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')
 
 const WIDTHS: Record<string, number[]> = {

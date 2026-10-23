@@ -83,9 +83,13 @@ a:hover {
 }
 
 :focus-visible {
-  outline: 3px solid var(--olive);
-  outline-offset: 3px;
-  border-radius: 6px;
+  outline: 2px solid var(--olive);
+  outline-offset: 4px;
+}
+
+/* the outline follows each element's own corners; only bare text links get a soft one */
+a:not([class]):focus-visible {
+  border-radius: 3px;
 }
 
 small,

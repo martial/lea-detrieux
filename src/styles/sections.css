@@ -74,9 +74,11 @@
   padding-top: clamp(1.5rem, 1rem + 3vw, 4rem);
 }
 
-@media (min-width: 960px) {
+/* From tablet width up the hero is two columns; phones keep it stacked */
+@media (min-width: 761px) {
   .hero {
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    padding-bottom: calc(var(--section) * 0.6);
   }
 }
 
@@ -99,7 +101,7 @@
 }
 
 .hero-job {
-  font-size: var(--step-2);
+  font-size: clamp(1.5rem, 1.15rem + 1.1vw, 2.25rem);
   font-style: italic;
   font-weight: 400;
   color: var(--olive);
@@ -161,7 +163,7 @@
   width: clamp(124px, 34%, 184px);
   height: auto;
   rotate: -9deg;
-  filter: drop-shadow(0 6px 18px rgb(43 52 36 / 0.14));
+  filter: drop-shadow(0 4px 10px rgb(43 52 36 / 0.12));
   transition: rotate 0.9s var(--spring), scale 0.9s var(--spring);
 }
 
@@ -171,18 +173,29 @@
   scale: 1.04;
 }
 
-/* Until Léa's photo arrives, the stamp itself is the hero image */
+/* Until Léa's photo arrives, the stamp itself is the hero image: pressed across the
+   edge of the rose shape, half on the shape, half printed straight onto the page. */
 .hero-visual:has(> [data-missing-photo]) > [data-missing-photo] {
   display: none;
 }
 
+.hero-visual:has(> [data-missing-photo]) {
+  aspect-ratio: 1 / 1.04;
+}
+
+.hero-visual:has(> [data-missing-photo]) .hero-blob {
+  left: 24%;
+  top: 0;
+  width: 78%;
+  height: 74%;
+}
+
 .hero-visual:has(> [data-missing-photo]) .seal {
-  left: 50%;
-  top: 48%;
-  bottom: auto;
-  width: 66%;
-  translate: -50% -50%;
-  rotate: -6deg;
+  left: 0;
+  bottom: 0;
+  width: 76%;
+  rotate: -8deg;
+  filter: none;
 }
 
 .seal-paper {
@@ -215,18 +228,6 @@
   overflow: clip;
 }
 
-.watermark {
-  position: absolute;
-  z-index: -1;
-  right: max(-12rem, -20vw);
-  top: 6rem;
-  width: auto;
-  height: min(110%, 64rem);
-  aspect-ratio: 1133 / 1528;
-  color: var(--rose-pale);
-  pointer-events: none;
-}
-
 .picker-tabs {
   position: relative;
   display: flex;
@@ -251,14 +252,16 @@
   transition: color 0.2s;
 }
 
+/* The selected word sits on one brush stroke (src/assets/stroke.svg): a loaded start,
+   a dry, split tail, drawn low across the word like a hand-laid underline. */
 .picker-tabs button::before {
   content: '';
   position: absolute;
   z-index: -1;
   inset: 12% -10% 0;
   background: var(--rose);
-  -webkit-mask: url('../assets/blob.svg') center / 100% 100% no-repeat;
-  mask: url('../assets/blob.svg') center / 100% 100% no-repeat;
+  -webkit-mask: url('../assets/stroke.svg') center 100% / 100% 82% no-repeat;
+  mask: url('../assets/stroke.svg') center 100% / 100% 82% no-repeat;
   opacity: 0;
   transform: scale(0.6) rotate(-8deg);
   transition: opacity 0.25s, transform 0.45s var(--ease);
@@ -271,9 +274,9 @@
   top: 0;
   z-index: 0;
   background: var(--rose);
-  -webkit-mask: url('../assets/blob.svg') center / 100% 100% no-repeat;
-  mask: url('../assets/blob.svg') center / 100% 100% no-repeat;
-  rotate: -4deg;
+  -webkit-mask: url('../assets/stroke.svg') center 100% / 100% 82% no-repeat;
+  mask: url('../assets/stroke.svg') center 100% / 100% 82% no-repeat;
+  rotate: -3deg;
   pointer-events: none;
   transition: translate 0.65s cubic-bezier(0.3, 1.2, 0.5, 1), width 0.5s var(--ease), height 0.5s var(--ease);
 }
@@ -290,13 +293,25 @@
   color: var(--olive);
 }
 
+/* From tablet width up the five words always hold on one line */
+@media (min-width: 761px) {
+  .picker-tabs {
+    column-gap: clamp(0.75rem, 3.4vw - 0.75rem, 2.25rem);
+  }
+
+  .picker-tabs button {
+    padding-inline: 0.15em;
+    font-size: clamp(2.25rem, 1rem + 3.6vw, 4rem);
+  }
+}
+
 .picker-tabs button[aria-selected='true'] {
   color: var(--olive);
 }
 
 .picker-tabs button[aria-selected='true']::before {
   opacity: 1;
-  transform: scale(1) rotate(-4deg);
+  transform: scale(1) rotate(-3deg);
 }
 
 .picker-panels {
@@ -318,9 +333,16 @@
   align-items: start;
 }
 
-@media (min-width: 860px) {
+@media (min-width: 761px) {
   .panel {
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    grid-template-columns: var(--split);
+    column-gap: var(--split-gap);
+  }
+
+  /* the note and the full price list continue the text column, under the prices */
+  .vet-note,
+  .all-prices-box {
+    margin-left: calc((100% - var(--split-gap)) * 4 / 9 + var(--split-gap));
   }
 }
 
@@ -329,10 +351,32 @@
   max-width: 440px;
 }
 
+/* One set: every photo is cut to the same hand-drawn frame (src/assets/frame.svg, a
+   rectangle with soft, uneven corners, like her price cards) and given the same quiet
+   grade, a little less colour and a warm lift, so stock photos and Léa's own sit together. */
 .panel-photo picture,
-.panel-photo [data-missing-photo] {
-  border-radius: var(--radius);
-  overflow: hidden;
+.panel-photo [data-missing-photo],
+.about-picture {
+  position: relative;
+  display: block;
+  -webkit-mask: url('../assets/frame.svg') center / 100% 100% no-repeat;
+  mask: url('../assets/frame.svg') center / 100% 100% no-repeat;
+}
+
+.panel-photo img,
+.about-picture img {
+  filter: saturate(0.8) contrast(0.95) brightness(1.03);
+}
+
+.panel-photo picture::after,
+.about-picture::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--rose);
+  mix-blend-mode: soft-light;
+  opacity: 0.55;
+  pointer-events: none;
 }
 
 .panel-photo img {
@@ -400,9 +444,17 @@
 }
 
 .price {
-  font: 500 var(--step-2) / 1 var(--serif);
-  font-variant-numeric: lining-nums tabular-nums;
+  font: 400 clamp(1.75rem, 1.5rem + 0.7vw, 2.125rem) / 1 var(--serif);
+  font-variant-numeric: lining-nums proportional-nums;
+  letter-spacing: -0.01em;
   white-space: nowrap;
+}
+
+/* the figure speaks, the currency follows quietly */
+.eur {
+  font-size: 0.6em;
+  color: var(--olive-soft);
+  letter-spacing: 0;
 }
 
 .vet-note {
@@ -513,7 +565,8 @@
 
 @media (min-width: 900px) {
   .zone {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    grid-template-columns: var(--split);
+    column-gap: var(--split-gap);
   }
 }
 
@@ -612,7 +665,7 @@
 }
 
 .zone-map text {
-  font: 500 15px var(--sans);
+  font: 500 19px var(--sans);
   fill: var(--olive);
   paint-order: stroke;
   stroke: rgb(255 255 255 / 0.85);
@@ -621,7 +674,7 @@
 }
 
 .zone-map text.base {
-  font: 500 24px var(--serif);
+  font: 500 30px var(--serif);
 }
 
 .zone-map text.hit-label {
@@ -666,17 +719,23 @@
   align-items: center;
 }
 
-@media (min-width: 860px) {
+@media (min-width: 761px) {
   .about:not(:has(> [data-missing-photo])) {
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    grid-template-columns: var(--split);
+    column-gap: var(--split-gap);
+  }
+}
+
+/* The map already breathes inside its own faded edge: no need for a full gap after it */
+@media (min-width: 900px) {
+  .about {
+    padding-top: calc(var(--section) * 0.5);
   }
 }
 
 .about-picture,
 .about > [data-missing-photo] {
   max-width: 440px;
-  border-radius: var(--radius);
-  overflow: hidden;
 }
 
 .about-picture img {
@@ -755,6 +814,25 @@
   color: var(--olive-soft);
 }
 
+@media (min-width: 761px) {
+  .faq {
+    display: grid;
+    grid-template-columns: var(--split);
+    column-gap: var(--split-gap);
+    align-items: start;
+  }
+
+  .faq h2 {
+    grid-row: 1 / span 20;
+    margin: 0;
+  }
+
+  .faq details {
+    grid-column: 2;
+    max-width: none;
+  }
+}
+
 /* ——— Contact ——— */
 .contact {
   display: grid;
@@ -764,7 +842,7 @@
 }
 
 .contact h2 {
-  color: var(--rose);
+  color: var(--sauge-pale); /* the number is the one rose thing here */
 }
 
 .contact > p {
@@ -817,6 +895,36 @@
   border-top: 1px solid rgb(255 255 255 / 0.18);
   font-size: var(--step--1);
   color: rgb(255 255 255 / 0.82);
+}
+
+/* Wide screens: what to say on the left, the number to call on the shared text line */
+@media (min-width: 1000px) {
+  .contact {
+    grid-template-columns: var(--split);
+    column-gap: var(--split-gap);
+    align-items: start;
+  }
+
+  .contact > :is(h2, p:not(.contact-insta)) {
+    grid-column: 1;
+  }
+
+  .contact > p:not(.contact-insta) {
+    grid-row: 2 / span 3;
+  }
+
+  .contact > :is(.contact-phone, .actions, .contact-insta) {
+    grid-column: 2;
+  }
+
+  .contact-phone {
+    grid-row: 1;
+    margin-top: -0.12em; /* cap tops level with the heading's */
+  }
+
+  .contact .legal {
+    grid-column: 1 / -1;
+  }
 }
 
 .legal-mark {

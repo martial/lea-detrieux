@@ -250,23 +250,3 @@
 .faq details[open] p {
   animation: fade-up 0.6s var(--ease) 0.05s backwards;
 }
-
-/* ——— Her mark drifts behind the prices as the page scrolls ——— */
-@supports (animation-timeline: view()) {
-  .watermark {
-    animation: drift linear both;
-    animation-timeline: view();
-  }
-
-  @keyframes drift {
-    from {
-      translate: 0 -6%;
-      rotate: -3deg;
-    }
-
-    to {
-      translate: 0 8%;
-      rotate: 3deg;
-    }
-  }
-}
