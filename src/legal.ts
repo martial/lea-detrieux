@@ -1,0 +1,6 @@
+import '@fontsource/playfair-display/latin-500.css'
+import '@fontsource/hind/latin-400.css'
+import '@fontsource/hind/latin-500.css'
+import './styles/tokens.css'
+import './styles/base.css'
+import './styles/legal.css'

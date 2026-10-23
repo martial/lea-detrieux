@@ -1,0 +1,29 @@
+{
+  "name": "lea-detrieux",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "zone": "node scripts/build-zone.ts",
+    "photos": "node scripts/build-photos.ts",
+    "deploy": "GH_PAGES=1 npm run build && touch dist/.nojekyll && gh-pages -d dist --dotfiles",
+    "og": "sh scripts/og.sh"
+  },
+  "devDependencies": {
+    "@types/d3-geo": "^3.1.1",
+    "@types/geojson": "^7946.0.16",
+    "@types/node": "^26.6.5",
+    "d3-geo": "^3.1.1",
+    "gh-pages": "^6.3.0",
+    "sharp": "^0.35.5",
+    "typescript": "~6.0.3",
+    "vite": "^8.3.4"
+  },
+  "dependencies": {
+    "@fontsource/hind": "^5.3.0",
+    "@fontsource/playfair-display": "^5.3.0"
+  }
+}

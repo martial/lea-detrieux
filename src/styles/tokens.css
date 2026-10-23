@@ -1,0 +1,30 @@
+/* Colours and type taken from Léa's own Instagram cards and logo. */
+:root {
+  --blanc: #ffffff;
+  --sauge-pale: #edf0e6;
+  --sauge: #7e8d6e; /* display text ≥ 24px only (3.6:1 on white) */
+  --sauge-mark: #8e9a80; /* the logo mark */
+  --olive: #2b3424; /* body text, buttons */
+  --olive-soft: #4f5945; /* secondary text, 7:1 on white */
+  --rose: #e6c0b0; /* shapes only, never text on white */
+  --rose-pale: #f6e8e1;
+  --ocre: #b4865c; /* the ring text of the logo */
+  --line: #d9ded0;
+
+  --serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --sans: 'Hind', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --step--1: 0.9375rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.3125rem;
+  --step-2: clamp(1.5rem, 1.3rem + 0.6vw, 1.75rem);
+  --step-3: clamp(2rem, 1.45rem + 2.4vw, 3.25rem);
+  --step-4: clamp(2.375rem, 1.6rem + 3.4vw, 4.5rem);
+  --step-5: clamp(3.4rem, 1.9rem + 6.4vw, 7.75rem);
+
+  --gutter: clamp(16px, 4vw, 40px);
+  --max: 1160px;
+  --radius: 20px;
+  --section: clamp(4rem, 3rem + 5vw, 8rem);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
