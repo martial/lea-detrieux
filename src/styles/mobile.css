@@ -278,24 +278,72 @@ summary {
   }
 }
 
-/* ——— Animals on phones: the five words on two lines, the price closer to the tap ——— */
+/* ——— Animals on phones: the five words stay pinned at the top while you read, so changing
+   animal is always one tap away; the price comes right under the animal's name, and the
+   photo is a small portrait beside it instead of a screenful ——— */
 @media (max-width: 599px) {
   .picker-tabs {
-    column-gap: 0.6rem;
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    column-gap: 0;
+    margin: 0 calc(-1 * var(--gutter)) 1.5rem;
+    padding: max(0.4rem, env(safe-area-inset-top)) var(--gutter) 0.4rem;
+    background: rgb(255 255 255 / 0.94);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 1px 0 var(--line);
   }
 
+  /* the five words share one line: 14.5em of Playfair plus room between them */
   .picker-tabs button {
-    font-size: clamp(2rem, 1rem + 4.4vw, 2.25rem);
-  }
-
-  /* a landscape crop: after a tap the animal's name and first lines show with its photo */
-  .panel-photo img,
-  .panel-photo [data-missing-photo] {
-    aspect-ratio: 4 / 3;
+    min-height: 44px;
+    padding: 0.1em 0.1em 0.15em;
+    font-size: clamp(1.1rem, (100vw - 2rem) / 16.2, 1.75rem);
   }
 
   .panel {
-    gap: 1.25rem;
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    column-gap: 1rem;
+    row-gap: 1.1rem;
+    align-items: center;
+  }
+
+  .panel-text {
+    display: contents;
+  }
+
+  .panel-photo {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .panel-photo img,
+  .panel-photo [data-missing-photo] {
+    aspect-ratio: 1;
+    object-position: 50% 28%; /* the faces sit high in these portraits */
+  }
+
+  /* the photographers stay credited in the legal notice */
+  .panel-photo figcaption {
+    display: none;
+  }
+
+  .panel h3 {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .panel .prices,
+  .panel-when,
+  .reasons {
+    grid-column: 1 / -1;
+  }
+
+  .panel .prices {
+    margin-top: 0;
   }
 }
 

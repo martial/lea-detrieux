@@ -56,12 +56,12 @@ function panel(s: Species, i: number) {
   const reasons = s.reasons.map((r) => `<li>${r}</li>`).join('')
   const credit = s.photo.credit ? `<figcaption>Photo&#8239;: ${s.photo.credit} (Unsplash)</figcaption>` : ''
   return `<div class="panel${i === 0 ? ' is-active' : ''}" id="${s.slug}" role="tabpanel" aria-labelledby="tab-${s.slug}" data-sms="${esc(s.forSms)}">
-  <figure class="panel-photo">${picture(s.photo.name, s.photo.alt, '(min-width: 960px) 420px, 88vw')}${credit}</figure>
+  <figure class="panel-photo">${picture(s.photo.name, s.photo.alt, '(min-width: 960px) 420px, (min-width: 600px) 40vw, 96px')}${credit}</figure>
   <div class="panel-text">
     <h3>${s.title}</h3>
+    <ul class="prices" aria-label="Tarifs par séance">${prices}</ul>
     <p class="panel-when">Quand faire appel à moi&#8239;?</p>
     <ul class="reasons" data-draft>${reasons}</ul>
-    <ul class="prices" aria-label="Tarifs par séance">${prices}</ul>
   </div>
 </div>`
 }

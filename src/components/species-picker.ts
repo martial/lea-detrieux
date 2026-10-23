@@ -2,7 +2,7 @@
 // The URL hash (#chat…) opens an animal directly. One rose stroke travels from word
 // to word, and the new animal's panel wipes in from the side we move towards.
 
-import { enterPanel, swipe } from './motion'
+import { enterPanel, reducedMotion, swipe } from './motion'
 
 export function initSpeciesPicker(onChange: (panel: HTMLElement) => void) {
   const list = document.querySelector<HTMLElement>('.picker-tabs')
@@ -44,10 +44,19 @@ export function initSpeciesPicker(onChange: (panel: HTMLElement) => void) {
     if (notify) onChange(panelOf(tab))
   }
 
+  // On phones the words stay pinned at the top: after a tap further down, bring the new
+  // animal's name and price up under them instead of leaving the reader mid-list
+  function bringIntoView(tab: HTMLButtonElement) {
+    const bar = list!.getBoundingClientRect()
+    const top = panelOf(tab).getBoundingClientRect().top
+    if (top < bar.bottom) window.scrollBy({ top: top - bar.bottom - 16, behavior: reducedMotion() ? 'auto' : 'smooth' })
+  }
+
   list.addEventListener('click', (e) => {
     const tab = (e.target as HTMLElement).closest<HTMLButtonElement>('[role="tab"]')
     if (!tab) return
     select(tab)
+    bringIntoView(tab)
     history.replaceState(null, '', `#${tab.getAttribute('aria-controls')}`)
   })
 
