@@ -83,7 +83,7 @@ summary {
   .hero-visual:has(> [data-missing-photo]) {
     justify-self: end;
     align-self: start;
-    width: clamp(132px, 39vw, 180px);
+    width: clamp(120px, 39vw, 180px);
     margin: -4.25rem 0 0;
   }
 
