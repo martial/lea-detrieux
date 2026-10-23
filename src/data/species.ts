@@ -21,14 +21,14 @@ export const species: Species[] = [
     forSms: 'mon cheval',
     photo: {
       name: 'cheval',
-      alt: "Tête d'un cheval alezan à liste blanche, dans la lumière du soir.",
+      alt: 'Tête d’un cheval alezan à liste blanche, dans la lumière du soir.',
       credit: 'Pieter van Noorden',
     },
     reasons: [
-      'Il manque de souplesse, se défend ou refuse sous la selle.',
-      "Il travaille moins bien, ou son attitude a changé, sans que le vétérinaire trouve de cause.",
+      'Il est raide d’un côté, se défend ou refuse sous la selle.',
+      'Il travaille moins bien, ou son attitude a changé, sans que le vétérinaire trouve de cause.',
       'Après une chute, un coup, un poulinage ou un long transport.',
-      'Pour le suivi d’un cheval de sport, d’un cheval âgé ou d’un poulain qui grandit.',
+      'Pour le suivi d’un cheval de sport ou de loisir, d’un cheval âgé ou d’un poulain qui grandit.',
     ],
     prices: [
       { label: 'Cheval', price: 90 },
@@ -108,7 +108,7 @@ export const species: Species[] = [
     },
     reasons: [
       'Elle boite, se tient de travers ou a reçu un choc.',
-      'Oui, les poules aussi : une séance courte et tout en douceur.',
+      'Oui, les poules aussi : une séance courte et tout en douceur.',
     ],
     prices: [{ label: 'Poule', price: 30 }],
   },

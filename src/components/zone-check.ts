@@ -58,6 +58,9 @@ export function initZoneCheck(onCommune: (name: string | null) => void) {
   }
 
   const tel = `<a href="tel:${site.phoneHref}">appelez-moi</a>`
+  // After a yes: both ways to book, right there. contact.ts fills the SMS with the commune.
+  const book = `<a href="tel:${site.phoneHref}">Appelez-moi</a> ou <a data-sms href="sms:${site.phoneHref}">envoyez un SMS</a>.`
+  const further = `Ça reste possible : ${tel}, on en parle.`
 
   async function check() {
     const query = input.value.trim()
@@ -69,34 +72,35 @@ export function initZoneCheck(onCommune: (name: string | null) => void) {
     highlight(found)
     drawTrip(map, found.length === 1 ? found[0].c : null)
     if (found.length === 0) {
+      answer.innerHTML = `Je ne trouve pas « ${query.replace(/[<&]/g, '')} » autour du Sud-Gironde. Vérifiez l’orthographe, ou ${tel}.`
       onCommune(null)
-      answer.innerHTML = `Je ne trouve pas « ${query.replace(/[<&]/g, '')} » autour du Sud-Gironde. Vérifiez l’orthographe, ou ${tel}.`
       return
     }
     if (found.length > 1) {
       // A postcode covers several communes
-      onCommune(null)
       const kms = found.map((c) => c.km)
       const near = Math.min(...kms), far = Math.max(...kms)
       const cp = query.replace(/\D/g, '')
       if (far <= zone.radiusKm) {
-        answer.innerHTML = `Oui, je me déplace dans tout le ${cp}, à moins de ${far}&nbsp;km de ${zone.base}.`
+        answer.innerHTML = `Oui, je me déplace dans tout le ${cp}, à moins de ${far}&nbsp;km de ${zone.base}. ${book}`
       } else if (near > zone.radiusKm) {
-        answer.innerHTML = `Le ${cp} est à ${near}&nbsp;km ou plus de ${zone.base}, au-delà de ma zone habituelle. Ça reste possible&nbsp;: ${tel}, on en parle.`
+        answer.innerHTML = `Le ${cp} est à ${near}&nbsp;km ou plus de ${zone.base}, au-delà de ma zone habituelle. ${further}`
       } else {
-        answer.innerHTML = `Une partie du ${cp} est dans ma zone. Écrivez le nom de votre commune pour en être sûr, ou ${tel}.`
+        answer.innerHTML = `Une partie du ${cp} est dans ma zone. Écrivez le nom de votre commune pour vérifier, ou ${tel}.`
       }
+      onCommune(null)
       return
     }
     const c = found[0]
-    onCommune(c.n)
     if (c.c === zone.code) {
-      answer.innerHTML = `Oui, je suis basée à ${zone.base}.`
+      answer.innerHTML = `Oui, je suis basée à ${zone.base}. ${book}`
     } else if (c.km <= zone.radiusKm) {
-      answer.innerHTML = `Oui, je me déplace à ${c.n}, à environ ${c.km}&nbsp;km de ${zone.base}.`
+      answer.innerHTML = `Oui, je me déplace à ${c.n}, à environ ${c.km}&nbsp;km de ${zone.base}. ${book}`
     } else {
-      answer.innerHTML = `${c.n} est à environ ${c.km}&nbsp;km de ${zone.base}, au-delà de ma zone habituelle. Ça reste possible&nbsp;: ${tel}, on en parle.`
+      answer.innerHTML = `${c.n} est à environ ${c.km}&nbsp;km de ${zone.base}, au-delà de ma zone habituelle. ${further}`
     }
+    // Last, so the SMS link just written gets the commune too
+    onCommune(c.n)
   }
 
   input.addEventListener('focus', () => void load(), { once: true })

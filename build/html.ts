@@ -12,6 +12,11 @@ const read = (p: string) => readFileSync(root + p, 'utf8')
 const euro = (n: number) => `${n}<span class="eur">&nbsp;€</span>`
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')
 
+// Cheapest and dearest session, for the hero and the JSON-LD: they follow species.ts
+const allPrices = species.flatMap((s) => s.prices.map((p) => p.price))
+const minPrice = Math.min(...allPrices)
+const maxPrice = Math.max(...allPrices)
+
 const WIDTHS: Record<string, number[]> = {
   'lea-epagneul': [560, 840, 1240],
   'lea-patou': [560, 900],
@@ -49,14 +54,14 @@ function panel(s: Species, i: number) {
     `<li><span class="price-label">${p.label}${p.note ? ` <small>${p.note}</small>` : ''}</span><span class="price">${euro(p.price)}</span></li>`,
   ).join('')
   const reasons = s.reasons.map((r) => `<li>${r}</li>`).join('')
-  const credit = s.photo.credit ? `<figcaption>Photo&nbsp;: ${s.photo.credit} (Unsplash)</figcaption>` : ''
+  const credit = s.photo.credit ? `<figcaption>Photo&#8239;: ${s.photo.credit} (Unsplash)</figcaption>` : ''
   return `<div class="panel${i === 0 ? ' is-active' : ''}" id="${s.slug}" role="tabpanel" aria-labelledby="tab-${s.slug}" data-sms="${esc(s.forSms)}">
   <figure class="panel-photo">${picture(s.photo.name, s.photo.alt, '(min-width: 960px) 420px, 88vw')}${credit}</figure>
   <div class="panel-text">
     <h3>${s.title}</h3>
-    <p class="panel-when">Quand faire appel à moi&nbsp;?</p>
+    <p class="panel-when">Quand faire appel à moi&#8239;?</p>
     <ul class="reasons" data-draft>${reasons}</ul>
-    <ul class="prices" aria-label="Tarifs">${prices}</ul>
+    <ul class="prices" aria-label="Tarifs par séance">${prices}</ul>
   </div>
 </div>`
 }
@@ -76,18 +81,55 @@ function robots() {
 }
 
 function jsonLd() {
-  const data = {
-    '@context': 'https://schema.org',
+  const business = {
     '@type': 'ProfessionalService',
+    '@id': `${site.url}#lea`,
     name: `${site.name}, ${site.job.toLowerCase()}`,
-    description: 'Ostéopathie animale à domicile pour chevaux, chiens, bovins, chats et poules, dans le Sud-Gironde.',
+    description: 'Ostéopathie animale à domicile autour de Langon, dans le Sud-Gironde, pour les chevaux, les chiens, les bovins, les chats et les poules. En complément du suivi vétérinaire.',
+    url: site.url,
+    image: `${site.url}og.jpg`,
+    logo: `${site.url}apple-touch-icon.png`,
     telephone: site.phoneHref,
-    areaServed: { '@type': 'GeoCircle', geoMidpoint: { '@type': 'GeoCoordinates', latitude: zone.centre[1], longitude: zone.centre[0] }, geoRadius: zone.radiusKm * 1000 },
     address: { '@type': 'PostalAddress', addressLocality: zone.base, postalCode: '33210', addressRegion: 'Gironde', addressCountry: 'FR' },
+    areaServed: [
+      { '@type': 'GeoCircle', geoMidpoint: { '@type': 'GeoCoordinates', latitude: zone.centre[1], longitude: zone.centre[0] }, geoRadius: zone.radiusKm * 1000 },
+      ...zone.towns.map((name) => ({ '@type': 'City', name })),
+    ],
+    priceRange: `${minPrice} € – ${maxPrice} €`,
+    currenciesAccepted: 'EUR',
     sameAs: [site.instagram],
-    priceRange: '30 € – 90 €',
+    founder: {
+      '@type': 'Person',
+      name: site.name,
+      jobTitle: site.job,
+      hasCredential: {
+        '@type': 'EducationalOccupationalCredential',
+        name: 'Inscription au Registre national d’aptitude en ostéopathie animale',
+        identifier: site.rna,
+        recognizedBy: { '@type': 'Organization', name: 'Ordre national des vétérinaires', url: 'https://www.veterinaire.fr/' },
+      },
+    },
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Tarifs par séance, à domicile',
+      itemListElement: species.flatMap((s) => s.prices.map((p) => ({
+        '@type': 'Offer',
+        name: `Séance d’ostéopathie, ${p.label.toLowerCase()}${p.note ? ` (${p.note})` : ''}`,
+        price: p.price,
+        priceCurrency: 'EUR',
+      }))),
+    },
   }
-  return `<script type="application/ld+json">${JSON.stringify(data)}</script>`
+  const website = {
+    '@type': 'WebSite',
+    '@id': `${site.url}#site`,
+    url: site.url,
+    name: site.name,
+    alternateName: `${site.name}, ${site.job.toLowerCase()}`,
+    inLanguage: 'fr-FR',
+    publisher: { '@id': `${site.url}#lea` },
+  }
+  return `<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@graph': [business, website] })}</script>`
 }
 
 const includes: Record<string, () => string> = {
@@ -97,9 +139,11 @@ const includes: Record<string, () => string> = {
   'zone-map': zoneMap,
   robots,
   'json-ld': jsonLd,
-  'og-image': () => `<meta property="og:image" content="${site.url}og.jpg"><meta property="og:url" content="${site.url}">`,
-  'hero-photo': () => picture('lea-epagneul', 'Léa, assise, tient contre elle un épagneul breton blanc et orange.', '(min-width: 960px) 520px, 92vw', { eager: true, cls: 'hero-picture' }),
-  'about-photo': () => picture('lea-patou', 'Léa, assise en terrasse, caresse un grand chien blanc.', '(min-width: 960px) 440px, 88vw', { cls: 'about-picture' }),
+  'og-image': () => `<meta property="og:image" content="${site.url}og.jpg"><meta property="og:image:alt" content="Léa Detrieux, ostéopathe animalier à domicile autour de Langon"><meta property="og:url" content="${site.url}">`,
+  canonical: () => `<link rel="canonical" href="${site.url}">`,
+  'price-range': () => `de ${minPrice} à ${euro(maxPrice)}`,
+  'hero-photo': () => picture('lea-epagneul', 'Léa Detrieux, ostéopathe animalier, tient contre elle un épagneul breton blanc et orange.', '(min-width: 960px) 520px, 92vw', { eager: true, cls: 'hero-picture' }),
+  'about-photo': () => picture('lea-patou', 'Léa Detrieux, assise en terrasse, caresse un grand chien blanc.', '(min-width: 960px) 440px, 88vw', { cls: 'about-picture' }),
 }
 
 export function fillIncludes(html: string) {
