@@ -1,0 +1,140 @@
+/* Phones and small tablets. The desktop layout lives in sections.css; this file only
+   adjusts it for small screens (≤ 759px wide, and phones held in landscape). */
+
+/* ——— Touch: a soft tap tint instead of the grey box, own feedback on buttons ——— */
+a,
+button,
+summary {
+  -webkit-tap-highlight-color: rgb(126 141 110 / 0.2);
+}
+
+.btn,
+.picker-tabs button,
+.callbar a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 759px) {
+  :root {
+    --section: clamp(3rem, 1.5rem + 5vw, 4rem);
+  }
+
+  /* ——— Header: comfortable targets ——— */
+  .brand {
+    min-height: 2.75rem;
+  }
+
+  .btn-small {
+    min-height: 2.75rem;
+  }
+}
+
+/* ——— Hero on phones: who, what, call. The stamp sits beside her name, on the first screen ——— */
+@media (max-width: 599px) {
+  .hero {
+    padding-top: clamp(1rem, 0.5rem + 2vw, 1.5rem);
+  }
+
+  .hero .actions {
+    display: grid;
+  }
+
+  /* The hero's own call button is right there, and the call bar takes over below it */
+  .top .btn {
+    display: none;
+  }
+
+  /* Until Léa's photo arrives the stamp is the hero image: a medallion beside « Léa » */
+  .hero:has(> .hero-visual > [data-missing-photo]) {
+    grid-template-areas: 'hero';
+  }
+
+  .hero:has(> .hero-visual > [data-missing-photo]) > * {
+    grid-area: hero;
+  }
+
+  .hero:has(> .hero-visual > [data-missing-photo]) .hero-text {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero:has(> .hero-visual > [data-missing-photo]) .hero-name .line {
+    display: block;
+  }
+
+  /* top right, over the empty end of the header, beside « Léa » */
+  .hero-visual:has(> [data-missing-photo]) {
+    justify-self: end;
+    align-self: start;
+    width: clamp(132px, 39vw, 180px);
+    margin: -4.25rem 0 0;
+  }
+
+  .hero-visual:has(> [data-missing-photo]) .seal {
+    width: 80%;
+  }
+
+  /* the rose shape leans up and out to the right, never behind the name */
+  .hero-visual:has(> [data-missing-photo]) .hero-blob {
+    left: 14%;
+    top: -2%;
+    width: 90%;
+    height: 86%;
+  }
+}
+
+/* ——— Call bar ———
+   Shown on phones (sections.css), and as a small pill on phones held in landscape.
+   With JavaScript it waits until the hero's call button has scrolled away, and leaves
+   again from the contact footer down (callbar.ts) and while the town field is in use. */
+@media (orientation: landscape) and (max-height: 520px) and (pointer: coarse) {
+  .callbar {
+    display: grid;
+    inset: auto max(1rem, env(safe-area-inset-right)) max(0.75rem, env(safe-area-inset-bottom)) auto;
+    grid-template-columns: auto auto;
+    padding: 0;
+    border-radius: 999px;
+    overflow: hidden;
+    box-shadow: 0 6px 24px rgb(43 52 36 / 0.25);
+  }
+
+  .callbar a {
+    min-height: 2.75rem;
+    padding: 0.2rem 1.5rem 0;
+  }
+}
+
+@media (max-width: 759px), (orientation: landscape) and (max-height: 520px) and (pointer: coarse) {
+  html {
+    scroll-padding-bottom: 5rem; /* keyboard focus never lands under the bar */
+  }
+
+  body {
+    padding-bottom: 0;
+  }
+
+  /* the room the bar needs at the very end now belongs to the footer, in its own colour */
+  .contact {
+    padding-bottom: calc(var(--section) + 3.5rem + env(safe-area-inset-bottom));
+  }
+
+  .js .contact {
+    padding-bottom: calc(var(--section) + env(safe-area-inset-bottom));
+  }
+
+  .callbar {
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+    transition: translate 0.45s var(--ease), visibility 0s;
+  }
+
+  .callbar a:active {
+    background: rgb(255 255 255 / 0.1);
+  }
+
+  .js .callbar:not(.is-up),
+  body:has(.zone-field input:focus) .callbar {
+    translate: 0 calc(100% + 2rem);
+    visibility: hidden;
+    transition: translate 0.35s var(--ease), visibility 0s 0.35s;
+  }
+}

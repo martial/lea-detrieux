@@ -9,12 +9,15 @@ import './styles/tokens.css'
 import './styles/base.css'
 import './styles/sections.css'
 import './styles/motion.css'
+import './styles/mobile.css'
 
 import { initSpeciesPicker } from './components/species-picker'
 import { initZoneCheck } from './components/zone-check'
 import { setAnimal, setCommune } from './components/contact'
 import { initMotion } from './components/motion'
+import { initCallbar } from './components/callbar'
 
 initMotion()
 initSpeciesPicker((panel) => setAnimal(panel.dataset.sms ?? null))
 initZoneCheck(setCommune)
+initCallbar()
