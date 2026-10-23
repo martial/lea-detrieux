@@ -73,10 +73,32 @@ const overpass = await json<{ elements: { geometry: { lat: number; lon: number }
     ),
   },
 )
-const garonne: GeoJSON.MultiLineString = {
-  type: 'MultiLineString',
-  coordinates: overpass.elements.map((w) => w.geometry.map((p) => [p.lon, p.lat])),
+// OSM ways point downstream. Chain them into continuous lines, main course first
+// (the head farthest east, towards Agen), so the page can draw the river flowing
+// from upstream to Bordeaux; side arms follow.
+type Pt = [number, number]
+const ways: Pt[][] = overpass.elements.map((w) => w.geometry.map((p): Pt => [p.lon, p.lat]))
+const key = (p: Pt) => `${p[0]},${p[1]}`
+const byStart = new Map<string, number[]>()
+ways.forEach((w, i) => byStart.set(key(w[0]), [...(byStart.get(key(w[0])) ?? []), i]))
+const endKeys = new Set(ways.map((w) => key(w[w.length - 1])))
+const used = new Set<number>()
+function follow(first: number): Pt[] {
+  const line: Pt[] = []
+  let cur: number | undefined = first
+  while (cur !== undefined && !used.has(cur)) {
+    used.add(cur)
+    const w: Pt[] = ways[cur]
+    line.push(...(line.length ? w.slice(1) : w))
+    cur = (byStart.get(key(w[w.length - 1])) ?? []).find((j) => !used.has(j))
+  }
+  return line
 }
+const heads = ways.map((_, i) => i).filter((i) => !endKeys.has(key(ways[i][0])))
+heads.sort((a, b) => ways[b][0][0] - ways[a][0][0])
+const lines = heads.map(follow)
+ways.forEach((_, i) => { if (!used.has(i)) lines.push(follow(i)) })
+const garonne: GeoJSON.MultiLineString = { type: 'MultiLineString', coordinates: lines.filter((l) => l.length > 1) }
 
 // Fit the projection on a circle of MAP_RADIUS_KM around the centre.
 const frame = geoCircle().center(centre).radius(MAP_RADIUS_KM / 111.2)()
@@ -110,7 +132,7 @@ const labels = shown.filter((c) => LABELS.has(c.nom)).map((c) => {
   const base = c.code === zone.code
   const dx = (base ? 13 : 8) * (left ? -1 : 1)
   const cls = base ? 'base' : minor ? 'minor' : ''
-  const attrs = `${cls ? ` class="${cls}"` : ''}${left ? ' text-anchor="end"' : ''}`
+  const attrs = ` data-c="${c.code}"${cls ? ` class="${cls}"` : ''}${left ? ' text-anchor="end"' : ''}`
   return `<text${attrs} x="${Math.round(x + dx)}" y="${Math.round(y + (base ? 7 : 5))}">${text}</text>`
 }).join('')
 
@@ -121,7 +143,7 @@ const [cx, cy] = projection(centre)!
 const svg = `<svg class="zone-map" viewBox="0 0 ${SIZE} ${SIZE}" role="img" aria-labelledby="zone-map-title">
 <title id="zone-map-title">Carte du Sud-Gironde : la zone d'intervention couvre environ ${zone.radiusKm} km autour de ${zone.base}, le long de la Garonne.</title>
 <path class="area" d="${blob()}"/>
-<path class="river" d="${roundPath(path(garonne))}"/>
+<path class="river" pathLength="1" d="${roundPath(path(garonne))}"/>
 <g class="dots">${dots}</g>
 <circle class="home" cx="${r1(cx)}" cy="${r1(cy)}" r="7"/>
 <g class="labels">${labels}</g>
@@ -136,5 +158,5 @@ const list = withKm
 await mkdir(new URL('../src/generated/', import.meta.url), { recursive: true })
 await writeFile(new URL('../src/generated/zone-map.svg', import.meta.url), svg)
 await writeFile(new URL('../src/generated/communes.json', import.meta.url), JSON.stringify(list))
-console.log(`map: ${shown.length} communes, ${garonne.coordinates.length} river ways, ${(svg.length / 1024).toFixed(1)} KB`)
+console.log(`map: ${shown.length} communes, ${garonne.coordinates.length} river lines, ${(svg.length / 1024).toFixed(1)} KB`)
 console.log(`list: ${list.length} communes, ${list.filter((c) => c.km <= zone.radiusKm).length} inside ${zone.radiusKm} km`)

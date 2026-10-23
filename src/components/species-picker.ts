@@ -1,5 +1,8 @@
 // The five animal names work as tabs (WAI-ARIA tabs pattern, automatic activation).
-// The URL hash (#chat…) opens an animal directly.
+// The URL hash (#chat…) opens an animal directly. One rose stroke travels from word
+// to word, and the new animal's panel wipes in from the side we move towards.
+
+import { enterPanel, swipe } from './motion'
 
 export function initSpeciesPicker(onChange: (panel: HTMLElement) => void) {
   const list = document.querySelector<HTMLElement>('.picker-tabs')
@@ -8,19 +11,35 @@ export function initSpeciesPicker(onChange: (panel: HTMLElement) => void) {
   const tabs = [...list.querySelectorAll<HTMLButtonElement>('[role="tab"]')]
   const panelOf = (tab: HTMLButtonElement) => document.getElementById(tab.getAttribute('aria-controls')!)!
 
+  const ink = document.createElement('span')
+  ink.className = 'picker-ink'
+  ink.setAttribute('aria-hidden', 'true')
+  list.prepend(ink)
+  list.classList.add('has-ink')
+  let current = tabs[0]
+
+  function placeInk(tab: HTMLButtonElement, animate: boolean) {
+    ink.style.transition = animate ? '' : 'none'
+    ink.style.translate = `${tab.offsetLeft - tab.offsetWidth * 0.1}px ${tab.offsetTop + tab.offsetHeight * 0.12}px`
+    ink.style.width = `${tab.offsetWidth * 1.2}px`
+    ink.style.height = `${tab.offsetHeight * 0.88}px`
+    if (!animate) void ink.offsetWidth // apply the jump before transitions come back
+  }
+
   function select(tab: HTMLButtonElement, { focus = false, animate = true, notify = true } = {}) {
+    const dir = Math.sign(tabs.indexOf(tab) - tabs.indexOf(current)) || 1
     for (const t of tabs) {
       const on = t === tab
       t.setAttribute('aria-selected', String(on))
       t.tabIndex = on ? 0 : -1
-      const panel = panelOf(t)
-      panel.classList.toggle('is-active', on)
-      if (on && animate) {
-        panel.classList.remove('is-entering')
-        void panel.offsetWidth // restart the fade
-        panel.classList.add('is-entering')
-      }
+      panelOf(t).classList.toggle('is-active', on)
     }
+    placeInk(tab, animate)
+    if (animate && tab !== current) {
+      swipe(ink, dir)
+      enterPanel(panelOf(tab), dir)
+    }
+    current = tab
     if (focus) tab.focus()
     if (notify) onChange(panelOf(tab))
   }
@@ -47,9 +66,12 @@ export function initSpeciesPicker(onChange: (panel: HTMLElement) => void) {
     const tab = tabs.find((t) => `#${t.getAttribute('aria-controls')}` === location.hash)
     if (!tab) return
     select(tab, { animate: false })
-    panelOf(tab).blur() // the browser focuses the #fragment target; no frame around it
     document.getElementById('tarifs')?.scrollIntoView()
   }
+
+  // Words reflow when the fonts arrive or the window changes: keep the stroke under its word
+  new ResizeObserver(() => placeInk(current, false)).observe(list)
+  void document.fonts.ready.then(() => placeInk(current, false))
 
   window.addEventListener('hashchange', fromHash)
   // The first animal shows by default, but only a visitor's choice fills the SMS

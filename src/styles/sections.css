@@ -124,17 +124,21 @@
   aspect-ratio: 4 / 5;
 }
 
-.hero-blob,
 .hero-picture {
   -webkit-mask: url('../assets/blob.svg') center / 100% 100% no-repeat;
   mask: url('../assets/blob.svg') center / 100% 100% no-repeat;
 }
 
+/* The rose shape slowly changes form (SVG <animate>, paused for reduced motion in motion.ts) */
 .hero-blob {
   position: absolute;
-  inset: 3% -5% -3% 6%;
-  background: var(--rose);
-  transform: rotate(-7deg);
+  left: 6%;
+  top: 3%;
+  width: 99%;
+  height: 100%;
+  overflow: visible;
+  fill: var(--rose);
+  rotate: -7deg;
 }
 
 .hero-picture {
@@ -156,8 +160,15 @@
   bottom: -2%;
   width: clamp(124px, 34%, 184px);
   height: auto;
-  transform: rotate(-9deg);
+  rotate: -9deg;
   filter: drop-shadow(0 6px 18px rgb(43 52 36 / 0.14));
+  transition: rotate 0.9s var(--spring), scale 0.9s var(--spring);
+}
+
+/* A stamp likes to be touched */
+.hero-visual:hover .seal {
+  rotate: -2deg;
+  scale: 1.04;
 }
 
 /* Until Léa's photo arrives, the stamp itself is the hero image */
@@ -170,7 +181,8 @@
   top: 48%;
   bottom: auto;
   width: 66%;
-  transform: translate(-50%, -50%) rotate(-6deg);
+  translate: -50% -50%;
+  rotate: -6deg;
 }
 
 .seal-paper {
@@ -216,6 +228,7 @@
 }
 
 .picker-tabs {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem clamp(0.75rem, 0.25rem + 2vw, 2.25rem);
@@ -251,6 +264,28 @@
   transition: opacity 0.25s, transform 0.45s var(--ease);
 }
 
+/* With JS, one rose stroke travels from word to word instead of each word owning one */
+.picker-ink {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 0;
+  background: var(--rose);
+  -webkit-mask: url('../assets/blob.svg') center / 100% 100% no-repeat;
+  mask: url('../assets/blob.svg') center / 100% 100% no-repeat;
+  rotate: -4deg;
+  pointer-events: none;
+  transition: translate 0.65s cubic-bezier(0.3, 1.2, 0.5, 1), width 0.5s var(--ease), height 0.5s var(--ease);
+}
+
+.picker-tabs.has-ink button {
+  z-index: 1;
+}
+
+.picker-tabs.has-ink button::before {
+  display: none;
+}
+
 .picker-tabs button:hover {
   color: var(--olive);
 }
@@ -281,21 +316,6 @@
   display: grid;
   gap: clamp(1.5rem, 1rem + 2vw, 3.5rem);
   align-items: start;
-}
-
-.panel:focus-visible {
-  outline-offset: 12px;
-}
-
-.panel.is-entering {
-  animation: panel-in 0.4s var(--ease) both;
-}
-
-@keyframes panel-in {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
 }
 
 @media (min-width: 860px) {
@@ -619,7 +639,7 @@
     font-size: 40px;
   }
 
-  .zone-map text.minor {
+  .zone-map text.minor:not(.hit-label) {
     display: none;
   }
 

@@ -131,7 +131,11 @@ small,
   font: 500 var(--step-0) / 1.1 var(--sans);
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
+  transition: background-color 0.2s, color 0.2s, scale 0.2s var(--ease);
+}
+
+.btn:active {
+  scale: 0.97;
 }
 
 .btn:hover {

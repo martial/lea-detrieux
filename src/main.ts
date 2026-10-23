@@ -8,12 +8,13 @@ import '@fontsource/hind/latin-600.css'
 import './styles/tokens.css'
 import './styles/base.css'
 import './styles/sections.css'
+import './styles/motion.css'
 
 import { initSpeciesPicker } from './components/species-picker'
 import { initZoneCheck } from './components/zone-check'
 import { setAnimal, setCommune } from './components/contact'
-import { playIntro } from './components/intro'
+import { initMotion } from './components/motion'
 
-playIntro()
+initMotion()
 initSpeciesPicker((panel) => setAnimal(panel.dataset.sms ?? null))
 initZoneCheck(setCommune)

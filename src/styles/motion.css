@@ -1,0 +1,272 @@
+/* Motion. One choreographed arrival in the hero; after that, motion either answers
+   the visitor (picker, town check, FAQ) or shows what a section means (the map
+   spreading out from Langon, the session as one line). Everything here stops
+   under prefers-reduced-motion (see the end of sections.css). */
+
+/* ——— Arrival ——— */
+.top {
+  animation: fade 0.8s var(--ease) backwards;
+}
+
+.hero-name .line {
+  display: inline-block;
+  clip-path: inset(-0.6em -0.2em 0 -0.2em); /* clipped only below: the words rise from their baseline */
+}
+
+.hero-name .line > span {
+  display: inline-block;
+  animation: rise 1.15s var(--ease-expo) 0.1s backwards;
+}
+
+.hero-name .line:nth-child(2) > span {
+  animation-delay: 0.22s;
+}
+
+.hero-job {
+  animation: fade-up 0.9s var(--ease) 0.5s backwards;
+}
+
+.hero-lede {
+  animation: fade-up 0.9s var(--ease) 0.6s backwards;
+}
+
+.hero .actions {
+  animation: fade-up 0.9s var(--ease) 0.7s backwards;
+}
+
+.hero-rna {
+  animation: fade 1s var(--ease) 0.85s backwards;
+}
+
+.hero-blob {
+  animation: blob-in 1.7s var(--ease) 0.15s backwards;
+}
+
+.hero-picture {
+  animation: photo-in 1.4s var(--ease) 0.3s backwards;
+}
+
+.seal {
+  animation: seal-in 1.2s var(--spring) 0.55s backwards;
+}
+
+/* The mark draws itself: the stems rise, the arc sweeps, the vertebrae appear one by one.
+   .d-all closes the mask at the end so no sliver of the mark is ever left out. */
+#seal-draw > * {
+  transform-box: fill-box;
+}
+
+.d-stems {
+  transform-origin: 50% 100%;
+  animation: grow-y 0.9s var(--ease) 0.85s backwards;
+}
+
+.d-arc {
+  transform-origin: 0 50%;
+  animation: grow-x 0.6s var(--ease) 1.2s backwards;
+}
+
+.d-top {
+  transform-origin: 0 50%;
+  animation: grow-x 0.35s var(--ease) 1.45s backwards;
+}
+
+.d-bead {
+  transform-origin: 50% 50%;
+  animation: pop 0.55s var(--spring) 1.55s backwards;
+}
+
+.d-bead:nth-of-type(2) {
+  animation-delay: 1.65s;
+}
+
+.d-bead:nth-of-type(3) {
+  animation-delay: 1.75s;
+}
+
+.d-bead:nth-of-type(4) {
+  animation-delay: 1.85s;
+}
+
+.d-bead:nth-of-type(5) {
+  animation-delay: 1.95s;
+}
+
+.d-all {
+  animation: fade 0.3s linear 2.4s backwards;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    translate: 0 112%;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    translate: 0 16px;
+  }
+}
+
+@keyframes blob-in {
+  from {
+    opacity: 0;
+    scale: 0.8;
+    rotate: -22deg;
+  }
+}
+
+@keyframes photo-in {
+  from {
+    opacity: 0;
+    scale: 1.06;
+  }
+}
+
+@keyframes seal-in {
+  from {
+    opacity: 0;
+    scale: 0.5;
+    rotate: -50deg;
+  }
+}
+
+@keyframes grow-y {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes grow-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0);
+  }
+}
+
+/* ——— Session: one line runs through the four steps, the numbers land on it ——— */
+@media (min-width: 1080px) {
+  .steps {
+    position: relative;
+  }
+
+  .steps::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 1.75rem;
+    height: 1px;
+    background: var(--sauge);
+    opacity: 0.5;
+    transform-origin: 0 50%;
+    transition: scale 1.8s var(--ease);
+  }
+
+  .steps li::before {
+    position: relative;
+    justify-self: start;
+    padding-right: 0.5em;
+    background: var(--sauge-pale);
+  }
+
+  .steps.is-waiting::before {
+    scale: 0 1;
+  }
+}
+
+.steps li::before {
+  transition: opacity 0.6s var(--ease), translate 0.9s var(--spring);
+}
+
+.steps li:nth-child(2)::before {
+  transition-delay: 0.4s;
+}
+
+.steps li:nth-child(3)::before {
+  transition-delay: 0.8s;
+}
+
+.steps li:nth-child(4)::before {
+  transition-delay: 1.2s;
+}
+
+.steps.is-waiting li::before {
+  opacity: 0;
+  translate: 0 0.5em;
+}
+
+/* ——— Map: hidden until seen, then it spreads out from Langon (motion.ts) ——— */
+.zone-map.is-waiting :is(.area, .river, .dots, .labels, .home) {
+  opacity: 0;
+}
+
+.zone-map .trip {
+  fill: none;
+  stroke: var(--olive);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.zone-map .ripple {
+  fill: none;
+  stroke: var(--olive);
+  stroke-width: 2;
+  transform-box: fill-box;
+  transform-origin: center;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+/* ——— Questions open smoothly where the browser can animate to auto height ——— */
+:root {
+  interpolate-size: allow-keywords;
+}
+
+.faq details::details-content,
+.all-prices-box::details-content {
+  block-size: 0;
+  overflow: clip;
+  transition: block-size 0.5s var(--ease), content-visibility 0.5s allow-discrete;
+}
+
+.faq details[open]::details-content,
+.all-prices-box[open]::details-content {
+  block-size: auto;
+}
+
+.faq details[open] p {
+  animation: fade-up 0.6s var(--ease) 0.05s backwards;
+}
+
+/* ——— Her mark drifts behind the prices as the page scrolls ——— */
+@supports (animation-timeline: view()) {
+  .watermark {
+    animation: drift linear both;
+    animation-timeline: view();
+  }
+
+  @keyframes drift {
+    from {
+      translate: 0 -6%;
+      rotate: -3deg;
+    }
+
+    to {
+      translate: 0 8%;
+      rotate: 3deg;
+    }
+  }
+}
