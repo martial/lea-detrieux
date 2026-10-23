@@ -74,11 +74,17 @@
   padding-top: clamp(1.5rem, 1rem + 3vw, 4rem);
 }
 
-/* From tablet width up the hero is two columns; phones keep it stacked */
+/* From tablet width up the hero is two columns, and her name always stands on two
+   lines (at some widths "Léa Detrieux" would just fit on one); phones keep it stacked */
 @media (min-width: 761px) {
   .hero {
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
     padding-bottom: calc(var(--section) * 0.6);
+  }
+
+  .hero .hero-name > .line {
+    display: block;
+    width: fit-content;
   }
 }
 
@@ -240,6 +246,12 @@
   display: flex;
 }
 
+/* Without JavaScript the tabs and the town check stay out of sight: they need it to work
+   (their own display rules would otherwise override the hidden attribute) */
+html:not(.js) :is(.picker-tabs, .zone-check)[hidden] {
+  display: none;
+}
+
 .picker-tabs button {
   position: relative;
   isolation: isolate;
@@ -365,7 +377,7 @@
 
 .panel-photo img,
 .about-picture img {
-  filter: saturate(0.8) contrast(0.95) brightness(1.03);
+  filter: saturate(0.85) contrast(0.97) brightness(1.02);
 }
 
 .panel-photo picture::after,
@@ -375,7 +387,7 @@
   inset: 0;
   background: var(--rose);
   mix-blend-mode: soft-light;
-  opacity: 0.55;
+  opacity: 0.4;
   pointer-events: none;
 }
 

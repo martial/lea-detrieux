@@ -87,9 +87,15 @@ a:hover {
   outline-offset: 4px;
 }
 
-/* the outline follows each element's own corners; only bare text links get a soft one */
-a:not([class]):focus-visible {
-  border-radius: 3px;
+/* the outline follows each element's own corners; elements without corners get soft ones */
+a:not([class]):focus-visible,
+summary:focus-visible {
+  border-radius: 4px;
+}
+
+[role='tab']:focus-visible {
+  outline-offset: 0;
+  border-radius: 0.2em;
 }
 
 small,
