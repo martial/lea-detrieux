@@ -55,8 +55,10 @@
   text-decoration: none;
 }
 
-.top-nav a:hover {
-  text-decoration: underline;
+@media (hover: hover) {
+  .top-nav a:hover {
+    text-decoration: underline;
+  }
 }
 
 @media (min-width: 860px) {
@@ -173,10 +175,12 @@
   transition: rotate 0.9s var(--spring), scale 0.9s var(--spring);
 }
 
-/* A stamp likes to be touched */
-.hero-visual:hover .seal {
-  rotate: -2deg;
-  scale: 1.04;
+/* A stamp likes to be touched (pointer only: on touch screens the hover state sticks) */
+@media (hover: hover) {
+  .hero-visual:hover .seal {
+    rotate: -2deg;
+    scale: 1.04;
+  }
 }
 
 /* Until Léa's photo arrives, the stamp itself is the hero image: pressed across the
@@ -301,8 +305,10 @@ html:not(.js) :is(.picker-tabs, .zone-check)[hidden] {
   display: none;
 }
 
-.picker-tabs button:hover {
-  color: var(--olive);
+@media (hover: hover) {
+  .picker-tabs button:hover {
+    color: var(--olive);
+  }
 }
 
 /* From tablet width up the five words always hold on one line */
@@ -897,17 +903,19 @@ html:not(.js) :is(.picker-tabs, .zone-check)[hidden] {
   color: var(--olive);
 }
 
-.contact .btn:hover {
-  background: var(--rose-pale);
+@media (hover: hover) {
+  .contact .btn:hover {
+    background: var(--rose-pale);
+  }
+
+  .contact .btn-quiet:hover {
+    background: rgb(255 255 255 / 0.1);
+  }
 }
 
 .contact .btn-quiet {
   background: transparent;
   color: var(--blanc);
-}
-
-.contact .btn-quiet:hover {
-  background: rgb(255 255 255 / 0.1);
 }
 
 .contact :focus-visible {

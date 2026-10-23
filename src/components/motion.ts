@@ -143,7 +143,13 @@ export function initMotion() {
   const map = document.querySelector<SVGSVGElement>('.zone-map')
   if (map) revealMap(map)
   const steps = document.querySelector<HTMLElement>('.steps')
-  if (steps) {
+  if (steps && matchMedia('(max-width: 719px)').matches) {
+    // Phones stack the steps (styles/mobile.css): each number lands with its own step
+    for (const step of steps.children) {
+      step.classList.add('is-waiting')
+      whenSeen(step, () => step.classList.remove('is-waiting'), 0.5)
+    }
+  } else if (steps) {
     steps.classList.add('is-waiting')
     whenSeen(steps, () => steps.classList.remove('is-waiting'), 0.4)
   }
