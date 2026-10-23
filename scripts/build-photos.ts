@@ -17,7 +17,7 @@ const jobs: Job[] = [
   // swap this line for the commented one (and the credit in src/data/species.ts)
   // { src: 'ig/ig-spaniel.jpg', out: 'chien', widths: [480, 800, 1100], ratio: 4 / 5, crop: { left: 0.06, top: 0.36, width: 0.88 } },
   { src: 'stock/chien.jpg', out: 'chien', widths: [480, 800, 1100], ratio: 4 / 5, crop: { left: 0.3, top: 0, width: 0.533 } },
-  { src: 'ig/ig-white-dog.jpg', out: 'lea-patou', widths: [560, 900], ratio: 4 / 5, crop: { left: 0.1, top: 0, width: 0.8 } },
+  { src: 'ig/ig-white-dog.jpg', out: 'lea-patou', widths: [560, 900], ratio: 4 / 5, crop: { left: 0.19, top: 0, width: 0.8 } },
   // Free photos (Unsplash licence), see CREDITS.md
   { src: 'stock/cheval.jpg', out: 'cheval', widths: [480, 800, 1100], ratio: 4 / 5, crop: { left: 0, top: 0.08, width: 1 } },
   { src: 'stock/vache.jpg', out: 'vache', widths: [480, 800, 1100], ratio: 4 / 5, crop: { left: 0.035, top: 0.01, width: 0.93 } },
