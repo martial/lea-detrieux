@@ -29,15 +29,23 @@
 }
 
 .legal-text h1 {
-  font-size: var(--step-4);
+  font-size: clamp(2.25rem, 1.6rem + 2.4vw, 3.5rem);
   color: var(--sauge);
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
+/* each part opens on a hairline, like the price rows and the questions */
 .legal-text h2 {
+  max-width: 40rem;
   font-size: var(--step-2);
   color: var(--olive);
-  margin: 2.5rem 0 0.75rem;
+  margin: 2.75rem 0 0.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.legal-text h1 + h2 {
+  margin-top: 0;
 }
 
 .legal-text p,
@@ -47,5 +55,24 @@
 }
 
 .legal-text ul {
-  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.4rem;
+  list-style: none;
+}
+
+/* the same rose dot as the "when to call" lists */
+.legal-text li {
+  position: relative;
+  padding-left: 1.4rem;
+}
+
+.legal-text li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--rose);
 }

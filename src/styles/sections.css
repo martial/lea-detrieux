@@ -470,13 +470,34 @@
 }
 
 .all-prices-box summary {
-  display: inline-flex;
-  gap: 0.5rem;
+  position: relative;
+  display: inline-block;
+  padding-right: 1.6em;
   cursor: pointer;
+  list-style: none;
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 0.2em;
   text-decoration-thickness: 1px;
+}
+
+.all-prices-box summary::-webkit-details-marker {
+  display: none;
+}
+
+/* the same + as the questions, out of flow so the underline stays on the words */
+.all-prices-box summary::after {
+  content: '+';
+  position: absolute;
+  right: 0;
+  top: -0.1em;
+  font: 300 1.5rem / 1 var(--sans);
+  color: var(--sauge);
+  transition: rotate 0.25s var(--ease);
+}
+
+.all-prices-box[open] summary::after {
+  rotate: 45deg;
 }
 
 .all-prices-box[open] summary {
@@ -829,7 +850,7 @@
 
   .faq details {
     grid-column: 2;
-    max-width: none;
+    max-width: 36rem; /* same right edge as the panel and about text */
   }
 }
 
@@ -909,17 +930,14 @@
     grid-column: 1;
   }
 
-  .contact > p:not(.contact-insta) {
-    grid-row: 2 / span 3;
-  }
-
   .contact > :is(.contact-phone, .actions, .contact-insta) {
     grid-column: 2;
   }
 
-  .contact-phone {
+  /* heading and number share one baseline, like a line in a ledger */
+  .contact > :is(h2, .contact-phone) {
     grid-row: 1;
-    margin-top: -0.12em; /* cap tops level with the heading's */
+    align-self: last baseline;
   }
 
   .contact .legal {
