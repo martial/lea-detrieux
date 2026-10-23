@@ -243,6 +243,13 @@
   display: flex;
 }
 
+/* Without JavaScript the animal words and the town check would be dead controls (author
+   display rules beat [hidden]): all panels show instead, and the <noscript> towns */
+html:not(.js) .picker-tabs[hidden],
+html:not(.js) .zone-check[hidden] {
+  display: none;
+}
+
 .picker-tabs button {
   position: relative;
   isolation: isolate;
