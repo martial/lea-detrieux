@@ -4,7 +4,7 @@ One-page site for Léa Detrieux (Instagram @leadetrieux_oa): home-visit animal o
 Vite + TypeScript, no framework. The HTML is complete without JavaScript; the scripts add the animal picker,
 the "Votre commune ?" check and the pre-filled SMS.
 
-Preview: https://martial.github.io/lea-detrieux/ (noindex until Léa approves).
+Site: https://lea-detrieux.com/ (GitHub Pages; domain and DNS zone at OVH; noindex until Léa approves).
 
 ## Commands
 
@@ -12,7 +12,7 @@ Preview: https://martial.github.io/lea-detrieux/ (noindex until Léa approves).
 npm install
 npm run dev       # http://127.0.0.1:5194
 npm run build     # type-check + build into dist/
-npm run deploy    # build for GitHub Pages and push the gh-pages branch
+npm run deploy    # build and push the gh-pages branch (public/CNAME keeps the domain)
 npm run photos    # resize src/assets/photos/** into public/photos (AVIF + JPEG)
 npm run zone      # rebuild the map and the commune list (uses scripts/cache/)
 ```

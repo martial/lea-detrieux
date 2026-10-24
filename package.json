@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "zone": "node scripts/build-zone.ts",
     "photos": "node scripts/build-photos.ts",
-    "deploy": "GH_PAGES=1 npm run build && touch dist/.nojekyll && gh-pages -d dist --dotfiles",
+    "deploy": "npm run build && touch dist/.nojekyll && gh-pages -d dist --dotfiles",
     "og": "sh scripts/og.sh"
   },
   "devDependencies": {

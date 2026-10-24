@@ -1,9 +1,8 @@
 import { defineConfig, type Plugin } from 'vite'
 import { fillIncludes } from './build/html.ts'
 
-// GH_PAGES=1 builds for https://martial.github.io/lea-detrieux/
+// Served from the root of https://lea-detrieux.com/ (GitHub Pages, public/CNAME).
 // PUBLIC=1 removes the noindex (only once Léa has approved the site).
-const base = process.env.GH_PAGES === '1' ? '/lea-detrieux/' : '/'
 
 function includes(): Plugin {
   return {
@@ -20,7 +19,6 @@ function includes(): Plugin {
 }
 
 export default defineConfig({
-  base,
   plugins: [includes()],
   server: { port: 5194 },
   preview: { port: 5195 },

@@ -7,7 +7,7 @@ export const site = {
   phoneHref: '+33629958451',
   rna: 'OA 1193',
   instagram: 'https://www.instagram.com/leadetrieux_oa/',
-  url: 'https://martial.github.io/lea-detrieux/', // aperçu ; à changer avec son nom de domaine
+  url: 'https://lea-detrieux.com/',
 }
 
 export const zone = {
