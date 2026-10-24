@@ -6,6 +6,8 @@ import { drawTrip } from './motion'
 
 type Commune = { n: string; c: string; cp: string[]; km: number }
 
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+
 const fold = (s: string) =>
   s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
     .replace(/\bst\b/g, 'saint').replace(/\bste\b/g, 'sainte')
@@ -72,7 +74,7 @@ export function initZoneCheck(onCommune: (name: string | null) => void) {
     highlight(found)
     drawTrip(map, found.length === 1 ? found[0].c : null)
     if (found.length === 0) {
-      answer.innerHTML = `Je ne trouve pas « ${query.replace(/[<&]/g, '')} » autour du Sud-Gironde. Vérifiez l’orthographe, ou ${tel}.`
+      answer.innerHTML = `Je ne trouve pas « ${esc(query)} » autour du Sud-Gironde. Vérifiez l’orthographe, ou ${tel}.`
       onCommune(null)
       return
     }

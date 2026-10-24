@@ -38,7 +38,7 @@ export function picture(name: string, alt: string, sizes: string, opts: { eager?
 function markSymbol() {
   const svg = read('src/assets/logo/mark.svg')
   const inner = svg.replace(/^[\s\S]*?<g /, '<g ').replace(/<\/svg>\s*$/, '')
-  return `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="mark" viewBox="724 513 1133 1528" fill="currentColor">${inner}</symbol></svg>`
+  return `<svg width="0" height="0" class="sprite" aria-hidden="true"><symbol id="mark" viewBox="724 513 1133 1528" fill="currentColor">${inner}</symbol></svg>`
 }
 
 function speciesPicker() {

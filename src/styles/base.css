@@ -120,6 +120,11 @@ small,
   white-space: nowrap;
 }
 
+/* the hidden SVG holding her mark, used by <use href="#mark"> */
+.sprite {
+  position: absolute;
+}
+
 .skip {
   position: absolute;
   left: var(--gutter);
